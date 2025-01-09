@@ -1,2 +1,19 @@
 .vs/
 
+# .NET Core
+bin/
+obj/
+.vs/
+
+# Docker volumes
+data/
+
+# IDE files
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+
+# Logs
+logs/
+*.log

@@ -24,15 +24,19 @@ builder.Services.AddSingleton<IConsumer<string, string>>(sp =>
     return new ConsumerBuilder<string, string>(config).Build();
 });
 
+builder.Services.AddSingleton<ISendGridClient>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var apiKey = configuration["SendGrid:ApiKey"];
+    return new SendGridClient(apiKey);
+});
+
 // Add notification handlers as scoped
 builder.Services.AddScoped<INotificationHandler, EmailNotificationHandler>();
 builder.Services.AddScoped<INotificationHandler, WebhookNotificationHandler>();
 
 // Add HttpClient for webhook handler
 builder.Services.AddHttpClient();
-
-// Add SendGrid client
-builder.Services.AddSingleton<ISendGridClient>(new SendGridClient("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"));
 
 // Add hosted service
 builder.Services.AddHostedService<NotificationConsumerService>();

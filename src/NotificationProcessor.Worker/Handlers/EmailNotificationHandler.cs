@@ -1,6 +1,7 @@
 using NotificationService.Contracts.Models;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using Microsoft.Extensions.Logging;
 
 namespace NotificationProcessor.Worker.Handlers;
 
@@ -8,28 +9,26 @@ public class EmailNotificationHandler : INotificationHandler
 {
     private readonly ISendGridClient _sendGridClient;
     private readonly ILogger<EmailNotificationHandler> _logger;
-    private const string FROM_EMAIL = "sawah810@gmail.com";
+    private const string FROM_EMAIL = "kokekitchen7@gmail.com";
 
     public EmailNotificationHandler(
+        ISendGridClient sendGridClient,
         ILogger<EmailNotificationHandler> logger)
     {
-        _sendGridClient = new SendGridClient("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");
-        _logger = logger;
+        _sendGridClient = sendGridClient ?? throw new ArgumentNullException(nameof(sendGridClient));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public bool CanHandle(NotificationMessage notification)
     {
-        if (notification?.Request == null)
-            return false;
-
-        return notification.Request.Type == NotificationType.EMAIL;
+        return notification?.Request?.Type == NotificationType.EMAIL;
     }
 
     public async Task HandleAsync(NotificationMessage notification, CancellationToken cancellationToken)
     {
-        if (notification?.Request?.To == null)
+        if (notification?.Request?.To == null || string.IsNullOrEmpty(notification.Request.Content))
         {
-            _logger.LogError("Cannot process email notification: missing recipient email");
+            _logger.LogError("Cannot process email notification: missing recipient email or content");
             return;
         }
 
@@ -38,14 +37,13 @@ public class EmailNotificationHandler : INotificationHandler
             notification.Id,
             notification.Request.To);
 
-        var msg = new SendGridMessage()
-        {
-            From = new EmailAddress(FROM_EMAIL, "Notification System"),
-            Subject = notification.Request.Title,
-            PlainTextContent = notification.Request.Content,
-            HtmlContent = notification.Request.Content
-        };
-        msg.AddTo(new EmailAddress(notification.Request.To));
+        var from = new EmailAddress(FROM_EMAIL, "Notification System");
+        var to = new EmailAddress(notification.Request.To);
+        var subject = notification.Request.Title ?? "No Subject";
+        var plainTextContent = notification.Request.Content;
+        var htmlContent = notification.Request.Content;
+
+        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
 
         try
         {
@@ -67,7 +65,7 @@ public class EmailNotificationHandler : INotificationHandler
                     notification.Request.To,
                     response.StatusCode,
                     body);
-                throw new Exception($"SendGrid API returned {response.StatusCode}");
+                throw new Exception($"SendGrid API returned {response.StatusCode}: {body}");
             }
         }
         catch (Exception ex)

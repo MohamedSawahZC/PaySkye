@@ -8,6 +8,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
+    networks:
+      - notification-network
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -18,10 +20,12 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - notification-network
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -31,5 +35,55 @@ services:
       - "8080:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - notification-network
+
+  notification-api:
+    build:
+      context: .
+      dockerfile: src/NotificationService.API/Dockerfile
+    ports:
+      - "5000:80"
+      - "5001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Kafka__BootstrapServers=kafka:29092
+      - SendGrid__ApiKey=${SENDGRID_API_KEY}
+    depends_on:
+      - kafka
+    networks:
+      - notification-network
+
+  notification-processor:
+    build:
+      context: .
+      dockerfile: src/NotificationProcessor.API/Dockerfile
+    ports:
+      - "5002:80"
+      - "5003:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Kafka__BootstrapServers=kafka:29092
+    depends_on:
+      - kafka
+    networks:
+      - notification-network
+
+  notification-worker:
+    build:
+      context: .
+      dockerfile: src/NotificationProcessor.Worker/Dockerfile
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - Kafka__BootstrapServers=kafka:29092
+      - SendGrid__ApiKey=${SENDGRID_API_KEY}
+    depends_on:
+      - kafka
+    networks:
+      - notification-network
+
+networks:
+  notification-network:
+    driver: bridge
