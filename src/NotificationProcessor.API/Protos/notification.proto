@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "NotificationProcessor.API.Services";
+
+package NotificationService.Contracts.Models;
+
+service NotificationGrpc {
+    rpc SendNotification (GrpcNotificationRequest) returns (GrpcNotificationResponse);
+}
+
+message GrpcNotificationRequest {
+    string title = 1;
+    string content = 2;
+    NotificationType type = 3;
+    int32 priority = 4;
+    string to = 5;
+    string endpoint = 6;
+    string trace_id = 7;
+}
+
+message GrpcNotificationResponse {
+    string notification_id = 1;
+    string status = 2;
+    string created_at = 3;
+}
+
+enum NotificationType {
+    EMAIL = 0;
+    WEBHOOK = 1;
+}

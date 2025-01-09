@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "tvXJT8+Kl7rLSvL0F1dwFhzs0UUoeRf1a1jW/Aq1Gts=",
+  "Source": "NotificationProcessor.API",
+  "BasePath": "_content/NotificationProcessor.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\Sawah\\Desktop\\NotificationSystem\\src\\NotificationService.API\\NotificationService.API.csproj",
+      "Version": 2,
+      "Source": "NotificationService.API",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

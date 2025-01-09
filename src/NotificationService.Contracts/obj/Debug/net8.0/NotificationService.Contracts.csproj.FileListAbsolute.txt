@@ -1,0 +1,12 @@
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\bin\Debug\net8.0\NotificationService.Contracts.deps.json
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\bin\Debug\net8.0\NotificationService.Contracts.dll
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\bin\Debug\net8.0\NotificationService.Contracts.pdb
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\NotificationService.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\NotificationService.Contracts.AssemblyInfoInputs.cache
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\NotificationService.Contracts.AssemblyInfo.cs
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\NotificationService.Contracts.csproj.CoreCompileInputs.cache
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\NotificationService.Contracts.sourcelink.json
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\NotificationService.Contracts.dll
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\refint\NotificationService.Contracts.dll
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\NotificationService.Contracts.pdb
+C:\Users\Sawah\Desktop\NotificationSystem\src\NotificationService.Contracts\obj\Debug\net8.0\ref\NotificationService.Contracts.dll
